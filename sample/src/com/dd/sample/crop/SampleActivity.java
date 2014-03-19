@@ -25,17 +25,17 @@ public class SampleActivity extends Activity implements View.OnClickListener {
     private void initView() {
         mCropTextureView1 = (CropTextureView) findViewById(R.id.cropTextureView1);
         mCropTextureView1.setScaleType(CropTextureView.ScaleType.START);
-        mCropTextureView1.setUrlDataSource(FILE_URL);
+        mCropTextureView1.setDataSource(FILE_URL);
         mCropTextureView1.play();
 
         mCropTextureView2 = (CropTextureView) findViewById(R.id.cropTextureView2);
         mCropTextureView2.setScaleType(CropTextureView.ScaleType.CENTER_CROP);
-        mCropTextureView2.setUrlDataSource(FILE_URL);
+        mCropTextureView2.setDataSource(FILE_URL);
         mCropTextureView2.play();
 
         mCropTextureView3 = (CropTextureView) findViewById(R.id.cropTextureView3);
         mCropTextureView3.setScaleType(CropTextureView.ScaleType.END);
-        mCropTextureView3.setUrlDataSource(FILE_URL);
+        mCropTextureView3.setDataSource(FILE_URL);
         mCropTextureView3.play();
 
         findViewById(R.id.btnPlay).setOnClickListener(this);

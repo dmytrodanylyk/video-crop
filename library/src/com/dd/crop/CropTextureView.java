@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.TextureView;
 
-import java.io.File;
 import java.io.IOException;
 
 public class CropTextureView extends TextureView implements TextureView.SurfaceTextureListener {
@@ -109,18 +108,26 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
         setTransform(matrix);
     }
 
-    public void setUrlDataSource(String url) {
+    public void setDataSource(String path) {
         try {
-            mMediaPlayer.setDataSource(getContext(), Uri.parse(url));
+            mMediaPlayer.setDataSource(path);
             mIsDataSourceSet = true;
         } catch (IOException e) {
             Log.d(TAG, e.getMessage());
         }
     }
 
-    public void setAssetDataSource(File filePath) {
+    public void setDataSource(Context context, Uri uri) {
         try {
-            AssetFileDescriptor afd = getContext().getAssets().openFd(filePath.getPath());
+            mMediaPlayer.setDataSource(context, uri);
+            mIsDataSourceSet = true;
+        } catch (IOException e) {
+            Log.d(TAG, e.getMessage());
+        }
+    }
+
+    public void setDataSource(AssetFileDescriptor afd) {
+        try {
             long startOffset = afd.getStartOffset();
             long length = afd.getLength();
             mMediaPlayer.setDataSource(afd.getFileDescriptor(), startOffset, length);
