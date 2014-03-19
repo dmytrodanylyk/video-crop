@@ -18,7 +18,7 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
     private boolean mIsPlayCalled;
 
     public enum ScaleType {
-        CENTER_CROP, START, END;
+        CENTER_CROP, TOP, BOTTOM;
     }
 
     // Log tag
@@ -84,11 +84,11 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
         int pivotPointY;
 
         switch (mScaleType) {
-            case START:
+            case TOP:
                 pivotPointX = 0;
                 pivotPointY = 0;
                 break;
-            case END:
+            case BOTTOM:
                 pivotPointX = (int) (viewWidth);
                 pivotPointY = (int) (viewHeight);
                 break;

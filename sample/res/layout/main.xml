@@ -7,8 +7,7 @@
     <com.dd.crop.CropTextureView
         android:id="@+id/cropTextureView1"
         android:layout_width="fill_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="32dp" />
+        android:layout_height="100dp"/>
 
     <com.dd.crop.CropTextureView
         android:id="@+id/cropTextureView2"
@@ -31,25 +30,25 @@
             android:id="@+id/btnPlay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Play" />
+            android:text="@string/Play" />
 
         <Button
             android:id="@+id/btnPause"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pause" />
+            android:text="@string/Pause" />
 
         <Button
             android:id="@+id/btnResume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Resume" />
+            android:text="@string/Resume" />
 
         <Button
             android:id="@+id/btnStop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Stop" />
+            android:text="@string/Stop" />
     </LinearLayout>
 </LinearLayout>
 
