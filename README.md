@@ -1,3 +1,5 @@
+# IN DEVELOPMENT
+
 ![asd](https://raw.githubusercontent.com/dmytrodanylyk/android-video-crop/master/sample.png)
 
 ### Description
