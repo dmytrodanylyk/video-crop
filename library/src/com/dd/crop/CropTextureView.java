@@ -15,11 +15,8 @@ import java.io.IOException;
 
 public class CropTextureView extends TextureView implements TextureView.SurfaceTextureListener {
 
-    private boolean mIsPlayCalled;
-
-    public enum ScaleType {
-        CENTER_CROP, TOP, BOTTOM;
-    }
+    // Indicate if logging is on
+    public static final boolean LOG_ON = true;
 
     // Log tag
     private static final String TAG = CropTextureView.class.getName();
@@ -32,8 +29,18 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
 
     private boolean mIsDataSourceSet;
     private boolean mIsViewAvailable;
+    private boolean mIsPlayCalled;
 
     private ScaleType mScaleType;
+    private State mState;
+
+    public enum ScaleType {
+        CENTER_CROP, TOP, BOTTOM
+    }
+
+    public enum State {
+        UNINITIALIZED, PLAY, STOP, PAUSE, END
+    }
 
     public CropTextureView(Context context) {
         super(context);
@@ -52,6 +59,7 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
 
     private void initView() {
         mMediaPlayer = new MediaPlayer();
+        mState = State.UNINITIALIZED;
         setScaleType(ScaleType.CENTER_CROP);
         setSurfaceTextureListener(this);
     }
@@ -137,29 +145,49 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
         }
     }
 
+    private void prepare() {
+
+    }
+
     public void play() {
-        if (mMediaPlayer.isPlaying()) {
-            Log.w(TAG, "play() was called but video is already playin.");
+        if (!mIsDataSourceSet) {
+            log("play() was called but data source was not set.");
             return;
         }
 
         mIsPlayCalled = true;
-        if (!mIsDataSourceSet) {
-            Log.w(TAG, "play() was called but data source was not set.");
+
+        if (!mIsViewAvailable) {
+            log("play() was called but view is not available yet, waiting.");
             return;
         }
 
-        if (!mIsViewAvailable) {
-            Log.d(TAG, "play() was called but view is not available yet, waiting.");
+        if (mState == State.PLAY) {
+            log("play() was called but video is already playing.");
             return;
         }
+
+        if (mState == State.PAUSE) {
+            log("play() was called but video is paused, resuming.");
+            mState = State.PLAY;
+            mMediaPlayer.start();
+            return;
+        }
+
+        if (mState == State.END || mState == State.STOP) {
+            log("play() was called but video already ended, starting over.");
+            mState = State.PLAY;
+            mMediaPlayer.seekTo(0);
+            mMediaPlayer.start();
+            return;
+        }
+
+        mState = State.PLAY;
 
         Surface surface = new Surface(mSurfaceTexture);
         try {
 
             mMediaPlayer.setSurface(surface);
-            mMediaPlayer.setLooping(true);
-
             mMediaPlayer.setOnVideoSizeChangedListener(
                     new MediaPlayer.OnVideoSizeChangedListener() {
                         @Override
@@ -170,6 +198,13 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
                         }
                     }
             );
+            mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mState = State.END;
+                    log("Video has ended.");
+                }
+            });
 
             // don't forget to call MediaPlayer.prepareAsync() method when you use constructor for
             // creating MediaPlayer
@@ -193,25 +228,63 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
     }
 
     public void pause() {
+        if (mState == State.PAUSE) {
+            log("pause() was called but video already paused.");
+            return;
+        }
+
+        if (mState == State.STOP) {
+            log("pause() was called but video already stopped.");
+            return;
+        }
+
+        if (mState == State.END) {
+            log("pause() was called but video already ended.");
+            return;
+        }
+
+        mState = State.PAUSE;
         if (mMediaPlayer.isPlaying()) {
             mMediaPlayer.pause();
         }
     }
 
     public void stop() {
+        if (mState == State.STOP) {
+            log("stop() was called but video already stopped.");
+            return;
+        }
+
+        if (mState == State.END) {
+            log("stop() was called but video already ended.");
+            return;
+        }
+
+        mState = State.STOP;
         if (mMediaPlayer.isPlaying()) {
-            mMediaPlayer.stop();
+            mMediaPlayer.pause();
+            mMediaPlayer.seekTo(0);
         }
     }
 
-    public void resume() {
-        if (!mMediaPlayer.isPlaying()) {
-            mMediaPlayer.start();
-        }
+    /**
+     * @see android.media.MediaPlayer#seekTo(int)
+     */
+    public void seekTo(int milliseconds) {
+        mMediaPlayer.seekTo(milliseconds);
     }
 
-    public MediaPlayer getMediaPlayer() {
-        return mMediaPlayer;
+    /**
+     * @see android.media.MediaPlayer#getDuration()
+     */
+    public int getDuration() {
+        return mMediaPlayer.getDuration();
+    }
+
+    static void log(String message) {
+        if (LOG_ON) {
+            Log.d(TAG, message);
+        }
     }
 
     @Override
@@ -219,7 +292,7 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
         mSurfaceTexture = surfaceTexture;
         mIsViewAvailable = true;
         if (mIsDataSourceSet && mIsPlayCalled) {
-            Log.d(TAG, "View is available and play() was called.");
+            log("View is available and play() was called.");
             play();
         }
     }

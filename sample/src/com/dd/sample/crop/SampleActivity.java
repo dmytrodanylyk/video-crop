@@ -5,6 +5,7 @@ import com.dd.crop.CropTextureView;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.SeekBar;
 
 public class SampleActivity extends Activity implements View.OnClickListener {
 
@@ -26,22 +27,23 @@ public class SampleActivity extends Activity implements View.OnClickListener {
         mCropTextureView1 = (CropTextureView) findViewById(R.id.cropTextureView1);
         mCropTextureView1.setScaleType(CropTextureView.ScaleType.TOP);
         mCropTextureView1.setDataSource(FILE_URL);
-        mCropTextureView1.play();
+//        mCropTextureView1.play();
 
-        mCropTextureView2 = (CropTextureView) findViewById(R.id.cropTextureView2);
-        mCropTextureView2.setScaleType(CropTextureView.ScaleType.CENTER_CROP);
-        mCropTextureView2.setDataSource(FILE_URL);
-        mCropTextureView2.play();
+//        mCropTextureView2 = (CropTextureView) findViewById(R.id.cropTextureView2);
+//        mCropTextureView2.setScaleType(CropTextureView.ScaleType.CENTER_CROP);
+//        mCropTextureView2.setDataSource(FILE_URL);
+//        mCropTextureView2.play();
 
-        mCropTextureView3 = (CropTextureView) findViewById(R.id.cropTextureView3);
-        mCropTextureView3.setScaleType(CropTextureView.ScaleType.BOTTOM);
-        mCropTextureView3.setDataSource(FILE_URL);
-        mCropTextureView3.play();
+//        mCropTextureView3 = (CropTextureView) findViewById(R.id.cropTextureView3);
+//        mCropTextureView3.setScaleType(CropTextureView.ScaleType.BOTTOM);
+//        mCropTextureView3.setDataSource(FILE_URL);
+//        mCropTextureView3.play();
 
         findViewById(R.id.btnPlay).setOnClickListener(this);
         findViewById(R.id.btnPause).setOnClickListener(this);
         findViewById(R.id.btnStop).setOnClickListener(this);
-        findViewById(R.id.btnResume).setOnClickListener(this);
+
+        SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar);
     }
 
     @Override
@@ -49,23 +51,18 @@ public class SampleActivity extends Activity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.btnPlay:
                 mCropTextureView1.play();
-                mCropTextureView2.play();
-                mCropTextureView3.play();
+//                mCropTextureView2.play();
+//                mCropTextureView3.play();
                 break;
             case R.id.btnPause:
                 mCropTextureView1.pause();
-                mCropTextureView2.pause();
-                mCropTextureView3.pause();
+//                mCropTextureView2.pause();
+//                mCropTextureView3.pause();
                 break;
             case R.id.btnStop:
                 mCropTextureView1.stop();
-                mCropTextureView2.stop();
-                mCropTextureView3.stop();
-                break;
-            case R.id.btnResume:
-                mCropTextureView1.resume();
-                mCropTextureView2.resume();
-                mCropTextureView3.resume();
+//                mCropTextureView2.stop();
+//                mCropTextureView3.stop();
                 break;
         }
     }

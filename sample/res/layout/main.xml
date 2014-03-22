@@ -7,7 +7,7 @@
     <com.dd.crop.CropTextureView
         android:id="@+id/cropTextureView1"
         android:layout_width="fill_parent"
-        android:layout_height="100dp"/>
+        android:layout_height="100dp" />
 
     <com.dd.crop.CropTextureView
         android:id="@+id/cropTextureView2"
@@ -21,9 +21,21 @@
         android:layout_height="100dp"
         android:layout_marginTop="32dp" />
 
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
         android:orientation="horizontal">
 
         <Button
@@ -37,12 +49,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/Pause" />
-
-        <Button
-            android:id="@+id/btnResume"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Resume" />
 
         <Button
             android:id="@+id/btnStop"
