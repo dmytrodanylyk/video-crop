@@ -1,8 +1,8 @@
 ## Preview
 
-<img src="assets/sample1.png" width="200" />
-<img src="assets/sample2.png" width="200" />
-<img src="assets/sample3.png" width="200" />
+<img src="assets/sample1.png" width="220" />
+<img src="assets/sample2.png" width="220" />
+<img src="assets/sample3.png" width="220" />
 
 ## Description
 
