@@ -1,8 +1,8 @@
 ## Preview
 
-<img src="assets/sample1.png" width="280" />
-<img src="assets/sample2.png" width="280" />
-<img src="assets/sample3.png" width="280" />
+<img src="assets/sample1.png" width="200" />
+<img src="assets/sample2.png" width="200" />
+<img src="assets/sample3.png" width="200" />
 
 ## Description
 
@@ -99,6 +99,7 @@ CropTextureView.setListener(MediaPlayerListener)
 
 ## License
 
+```
 The MIT License (MIT)
 
 Copyright (c) 2014 Danylyk Dmytro
@@ -120,3 +121,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+```
