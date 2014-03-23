@@ -37,13 +37,13 @@ import java.io.IOException;
  *   SOFTWARE.
  */
 
-public class CropTextureView extends TextureView implements TextureView.SurfaceTextureListener {
+public class TextureVideoView extends TextureView implements TextureView.SurfaceTextureListener {
 
     // Indicate if logging is on
     public static final boolean LOG_ON = true;
 
     // Log tag
-    private static final String TAG = CropTextureView.class.getName();
+    private static final String TAG = TextureVideoView.class.getName();
 
     private MediaPlayer mMediaPlayer;
 
@@ -66,17 +66,17 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
         UNINITIALIZED, PLAY, STOP, PAUSE, END
     }
 
-    public CropTextureView(Context context) {
+    public TextureVideoView(Context context) {
         super(context);
         initView();
     }
 
-    public CropTextureView(Context context, AttributeSet attrs) {
+    public TextureVideoView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initView();
     }
 
-    public CropTextureView(Context context, AttributeSet attrs, int defStyle) {
+    public TextureVideoView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         initView();
     }

@@ -1,6 +1,6 @@
 package com.dd.sample.crop;
 
-import com.dd.crop.CropTextureView;
+import com.dd.crop.TextureVideoView;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -18,7 +18,7 @@ public class SampleActivity extends Activity implements View.OnClickListener,
 
     // Video file url
     private static final String FILE_URL = "http://www.w3schools.com/html/mov_bbb.mp4";
-    private CropTextureView mCropTextureView;
+    private TextureVideoView mTextureVideoView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,7 +45,7 @@ public class SampleActivity extends Activity implements View.OnClickListener,
     }
 
     private void initView() {
-        mCropTextureView = (CropTextureView) findViewById(R.id.cropTextureView);
+        mTextureVideoView = (TextureVideoView) findViewById(R.id.cropTextureView);
 
         findViewById(R.id.btnPlay).setOnClickListener(this);
         findViewById(R.id.btnPause).setOnClickListener(this);
@@ -56,13 +56,13 @@ public class SampleActivity extends Activity implements View.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnPlay:
-                mCropTextureView.play();
+                mTextureVideoView.play();
                 break;
             case R.id.btnPause:
-                mCropTextureView.pause();
+                mTextureVideoView.pause();
                 break;
             case R.id.btnStop:
-                mCropTextureView.stop();
+                mTextureVideoView.stop();
                 break;
         }
     }
@@ -75,22 +75,22 @@ public class SampleActivity extends Activity implements View.OnClickListener,
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
         switch (itemPosition) {
             case indexCropCenter:
-                mCropTextureView.stop();
-                mCropTextureView.setScaleType(CropTextureView.ScaleType.CENTER_CROP);
-                mCropTextureView.setDataSource(FILE_URL);
-                mCropTextureView.play();
+                mTextureVideoView.stop();
+                mTextureVideoView.setScaleType(TextureVideoView.ScaleType.CENTER_CROP);
+                mTextureVideoView.setDataSource(FILE_URL);
+                mTextureVideoView.play();
                 break;
             case indexCropTop:
-                mCropTextureView.stop();
-                mCropTextureView.setScaleType(CropTextureView.ScaleType.TOP);
-                mCropTextureView.setDataSource(FILE_URL);
-                mCropTextureView.play();
+                mTextureVideoView.stop();
+                mTextureVideoView.setScaleType(TextureVideoView.ScaleType.TOP);
+                mTextureVideoView.setDataSource(FILE_URL);
+                mTextureVideoView.play();
                 break;
             case indexCropBottom:
-                mCropTextureView.stop();
-                mCropTextureView.setScaleType(CropTextureView.ScaleType.BOTTOM);
-                mCropTextureView.setDataSource(FILE_URL);
-                mCropTextureView.play();
+                mTextureVideoView.stop();
+                mTextureVideoView.setScaleType(TextureVideoView.ScaleType.BOTTOM);
+                mTextureVideoView.setDataSource(FILE_URL);
+                mTextureVideoView.play();
                 break;
         }
         return true;

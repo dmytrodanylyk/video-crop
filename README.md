@@ -6,7 +6,7 @@
 
 ## Description
 
-[`CropTextureView`](/library/src/com/dd/crop/CropTextureView.java) is custom view based on android [`TextureView`](http://developer.android.com/reference/android/view/TextureView.html) which gives you ability to easy play and crop video. This very similar to [`ImageView#setScaleType`](http://developer.android.com/reference/android/widget/ImageView.html#setScaleType(android.widget.ImageView.ScaleType))
+[`TextureVideoView`](/library/src/com/dd/crop/TextureVideoView.java) is custom view based on android [`TextureView`](http://developer.android.com/reference/android/view/TextureView.html) which gives you ability to easy play and crop video. This very similar to [`ImageView#setScaleType`](http://developer.android.com/reference/android/widget/ImageView.html#setScaleType(android.widget.ImageView.ScaleType))
 
 Crop modes:
 
@@ -17,20 +17,20 @@ Crop modes:
 ## Usage
 
 
-Include library module to your project or copy [`CropTextureView`](/library/src/com/dd/crop/CropTextureView.java) class to your package.
+Include library module to your project or copy [`TextureVideoView`](/library/src/com/dd/crop/TextureVideoView.java) class to your package.
 
 
 ```xml
-<com.dd.crop.CropTextureView
+<com.dd.crop.TextureVideoView
         android:id="@+id/cropTextureView1"
         android:layout_width="fill_parent"
         android:layout_height="100dp"/>
 ```
 
 ```java
-CropTextureView cropTextureView = (CropTextureView) findViewById(R.id.cropTextureView);
+TextureVideoView cropTextureView = (TextureVideoView) findViewById(R.id.cropTextureView);
 // Use `setScaleType` method to crop video
-cropTextureView.setScaleType(CropTextureView.ScaleType.TOP);
+cropTextureView.setScaleType(TextureVideoView.ScaleType.TOP);
 // Use `setDataSource` method to set data source, this could be url, assets folder or path
 cropTextureView.setDataSource("http://www.w3schools.com/html/mov_bbb.mp4");
 cropTextureView.play();
@@ -48,53 +48,53 @@ ver 1.0
  *
  * If video is stopped or ended and play() method was called, video will start over.
  */
-CropTextureView.play()
+TextureVideoView.play()
 
 /**
  * Pause video. If video is already paused, stopped or ended nothing will happen.
  */
-CropTextureView.pause()
+TextureVideoView.pause()
 
 /**
  * Stop video (pause and seek to beginning). If video is already stopped or ended nothing will
  * happen.
  */
-CropTextureView.stop()
+TextureVideoView.stop()
 
 /**
  * Sets the data source (file-path or http/rtsp URL) to use.
  */
-CropTextureView.setDataSource(String)
+TextureVideoView.setDataSource(String)
 
 /**
  * Sets the data source as a content Uri.
  */
-CropTextureView.setDataSource(Context, Uri)
+TextureVideoView.setDataSource(Context, Uri)
 
 /**
  * Sets the data source (FileDescriptor) to use.
  */
-CropTextureView.setDataSource(AssetFileDescriptor)
+TextureVideoView.setDataSource(AssetFileDescriptor)
 
 /**
  * Sets the player to be looping or non-looping.
  */
-CropTextureView.setLooping(boolean)
+TextureVideoView.setLooping(boolean)
 
 /**
  * Seeks to specified time position. (milliseconds)
  */
-CropTextureView.seekTo(int)
+TextureVideoView.seekTo(int)
 
 /**
  * Gets the duration of the file.
  */
-CropTextureView.getDuration()
+TextureVideoView.getDuration()
 
 /**
- * Listener trigger 'onVideoPrepared' and `onVideoEnd` events
+ * Listener trigger `onVideoPrepared` and `onVideoEnd` events
  */
-CropTextureView.setListener(MediaPlayerListener)
+TextureVideoView.setListener(MediaPlayerListener)
 ```
 
 ## License
