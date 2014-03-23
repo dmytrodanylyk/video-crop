@@ -116,7 +116,7 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
     }
 
     private void initPlayer() {
-        if(mMediaPlayer == null) {
+        if (mMediaPlayer == null) {
             mMediaPlayer = new MediaPlayer();
         } else {
             mMediaPlayer.reset();
@@ -126,6 +126,9 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
         mState = State.UNINITIALIZED;
     }
 
+    /**
+     * @see android.media.MediaPlayer#setDataSource(String)
+     */
     public void setDataSource(String path) {
         initPlayer();
 
@@ -138,6 +141,9 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
         }
     }
 
+    /**
+     * @see android.media.MediaPlayer#setDataSource(android.content.Context, android.net.Uri)
+     */
     public void setDataSource(Context context, Uri uri) {
         initPlayer();
 
@@ -150,6 +156,9 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
         }
     }
 
+    /**
+     * @see android.media.MediaPlayer#setDataSource(java.io.FileDescriptor)
+     */
     public void setDataSource(AssetFileDescriptor afd) {
         initPlayer();
 
@@ -182,7 +191,7 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
                     mState = State.END;
                     log("Video has ended.");
 
-                    if(mListener != null) {
+                    if (mListener != null) {
                         mListener.onVideoEnd();
                     }
                 }
@@ -202,7 +211,7 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
                         play();
                     }
 
-                    if(mListener != null) {
+                    if (mListener != null) {
                         mListener.onVideoPrepared();
                     }
                 }
@@ -217,6 +226,12 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
         }
     }
 
+    /**
+     * Play or resume video. Video will be played as soon as view is available and media player is
+     * prepared.
+     *
+     * If video is stopped or ended and play() method was called, video will start over.
+     */
     public void play() {
         if (!mIsDataSourceSet) {
             log("play() was called but data source was not set.");
@@ -259,6 +274,9 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
         mMediaPlayer.start();
     }
 
+    /**
+     * Pause video. If video is already paused, stopped or ended nothing will happen.
+     */
     public void pause() {
         if (mState == State.PAUSE) {
             log("pause() was called but video already paused.");
@@ -281,6 +299,10 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
         }
     }
 
+    /**
+     * Stop video (pause and seek to beginning). If video is already stopped or ended nothing will
+     * happen.
+     */
     public void stop() {
         if (mState == State.STOP) {
             log("stop() was called but video already stopped.");
@@ -328,10 +350,9 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
 
     private MediaPlayerListener mListener;
 
-    public MediaPlayerListener getListener() {
-        return mListener;
-    }
-
+    /**
+     * Listener trigger 'onVideoPrepared' and `onVideoEnd` events
+     */
     public void setListener(MediaPlayerListener listener) {
         mListener = listener;
     }
