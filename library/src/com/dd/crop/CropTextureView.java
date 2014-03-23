@@ -13,6 +13,30 @@ import android.view.TextureView;
 
 import java.io.IOException;
 
+/*
+ *    The MIT License (MIT)
+ *
+ *   Copyright (c) 2014 Danylyk Dmytro
+ *
+ *   Permission is hereby granted, free of charge, to any person obtaining a copy
+ *   of this software and associated documentation files (the "Software"), to deal
+ *   in the Software without restriction, including without limitation the rights
+ *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *   copies of the Software, and to permit persons to whom the Software is
+ *   furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all
+ *   copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ *   SOFTWARE.
+ */
+
 public class CropTextureView extends TextureView implements TextureView.SurfaceTextureListener {
 
     // Indicate if logging is on
@@ -22,13 +46,13 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
     private static final String TAG = CropTextureView.class.getName();
 
     private MediaPlayer mMediaPlayer;
-    private SurfaceTexture mSurfaceTexture;
 
     private float mVideoHeight;
     private float mVideoWidth;
 
     private boolean mIsDataSourceSet;
     private boolean mIsViewAvailable;
+    private boolean mIsVideoPrepared;
     private boolean mIsPlayCalled;
 
     private ScaleType mScaleType;
@@ -58,8 +82,7 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
     }
 
     private void initView() {
-        mMediaPlayer = new MediaPlayer();
-        mState = State.UNINITIALIZED;
+        initPlayer();
         setScaleType(ScaleType.CENTER_CROP);
         setSurfaceTextureListener(this);
     }
@@ -116,39 +139,123 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
         setTransform(matrix);
     }
 
+    private void initPlayer() {
+        if (mMediaPlayer == null) {
+            mMediaPlayer = new MediaPlayer();
+        } else {
+            mMediaPlayer.reset();
+        }
+        mIsVideoPrepared = false;
+        mIsPlayCalled = false;
+        mState = State.UNINITIALIZED;
+    }
+
+    /**
+     * @see android.media.MediaPlayer#setDataSource(String)
+     */
     public void setDataSource(String path) {
+        initPlayer();
+
         try {
             mMediaPlayer.setDataSource(path);
             mIsDataSourceSet = true;
+            prepare();
         } catch (IOException e) {
             Log.d(TAG, e.getMessage());
         }
     }
 
+    /**
+     * @see android.media.MediaPlayer#setDataSource(android.content.Context, android.net.Uri)
+     */
     public void setDataSource(Context context, Uri uri) {
+        initPlayer();
+
         try {
             mMediaPlayer.setDataSource(context, uri);
             mIsDataSourceSet = true;
+            prepare();
         } catch (IOException e) {
             Log.d(TAG, e.getMessage());
         }
     }
 
+    /**
+     * @see android.media.MediaPlayer#setDataSource(java.io.FileDescriptor)
+     */
     public void setDataSource(AssetFileDescriptor afd) {
+        initPlayer();
+
         try {
             long startOffset = afd.getStartOffset();
             long length = afd.getLength();
             mMediaPlayer.setDataSource(afd.getFileDescriptor(), startOffset, length);
             mIsDataSourceSet = true;
+            prepare();
         } catch (IOException e) {
             Log.d(TAG, e.getMessage());
         }
     }
 
     private void prepare() {
+        try {
+            mMediaPlayer.setOnVideoSizeChangedListener(
+                    new MediaPlayer.OnVideoSizeChangedListener() {
+                        @Override
+                        public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+                            mVideoWidth = width;
+                            mVideoHeight = height;
+                            updateTextureViewSize();
+                        }
+                    }
+            );
+            mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mState = State.END;
+                    log("Video has ended.");
 
+                    if (mListener != null) {
+                        mListener.onVideoEnd();
+                    }
+                }
+            });
+
+            // don't forget to call MediaPlayer.prepareAsync() method when you use constructor for
+            // creating MediaPlayer
+            mMediaPlayer.prepareAsync();
+
+            // Play video when the media source is ready for playback.
+            mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mediaPlayer) {
+                    mIsVideoPrepared = true;
+                    if (mIsPlayCalled && mIsViewAvailable) {
+                        log("Player is prepared and play() was called.");
+                        play();
+                    }
+
+                    if (mListener != null) {
+                        mListener.onVideoPrepared();
+                    }
+                }
+            });
+
+        } catch (IllegalArgumentException e) {
+            Log.d(TAG, e.getMessage());
+        } catch (SecurityException e) {
+            Log.d(TAG, e.getMessage());
+        } catch (IllegalStateException e) {
+            Log.d(TAG, e.toString());
+        }
     }
 
+    /**
+     * Play or resume video. Video will be played as soon as view is available and media player is
+     * prepared.
+     *
+     * If video is stopped or ended and play() method was called, video will start over.
+     */
     public void play() {
         if (!mIsDataSourceSet) {
             log("play() was called but data source was not set.");
@@ -156,6 +263,11 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
         }
 
         mIsPlayCalled = true;
+
+        if (!mIsVideoPrepared) {
+            log("play() was called but video is not prepared yet, waiting.");
+            return;
+        }
 
         if (!mIsViewAvailable) {
             log("play() was called but view is not available yet, waiting.");
@@ -183,50 +295,12 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
         }
 
         mState = State.PLAY;
-
-        Surface surface = new Surface(mSurfaceTexture);
-        try {
-
-            mMediaPlayer.setSurface(surface);
-            mMediaPlayer.setOnVideoSizeChangedListener(
-                    new MediaPlayer.OnVideoSizeChangedListener() {
-                        @Override
-                        public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
-                            mVideoWidth = width;
-                            mVideoHeight = height;
-                            updateTextureViewSize();
-                        }
-                    }
-            );
-            mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    mState = State.END;
-                    log("Video has ended.");
-                }
-            });
-
-            // don't forget to call MediaPlayer.prepareAsync() method when you use constructor for
-            // creating MediaPlayer
-            mMediaPlayer.prepareAsync();
-
-            // Play video when the media source is ready for playback.
-            mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mediaPlayer) {
-                    mediaPlayer.start();
-                }
-            });
-
-        } catch (IllegalArgumentException e) {
-            Log.d(TAG, e.getMessage());
-        } catch (SecurityException e) {
-            Log.d(TAG, e.getMessage());
-        } catch (IllegalStateException e) {
-            Log.d(TAG, e.toString());
-        }
+        mMediaPlayer.start();
     }
 
+    /**
+     * Pause video. If video is already paused, stopped or ended nothing will happen.
+     */
     public void pause() {
         if (mState == State.PAUSE) {
             log("pause() was called but video already paused.");
@@ -249,6 +323,10 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
         }
     }
 
+    /**
+     * Stop video (pause and seek to beginning). If video is already stopped or ended nothing will
+     * happen.
+     */
     public void stop() {
         if (mState == State.STOP) {
             log("stop() was called but video already stopped.");
@@ -265,6 +343,13 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
             mMediaPlayer.pause();
             mMediaPlayer.seekTo(0);
         }
+    }
+
+    /**
+     * @see android.media.MediaPlayer#setLooping(boolean)
+     */
+    public void setLooping(boolean looping) {
+        mMediaPlayer.setLooping(looping);
     }
 
     /**
@@ -287,11 +372,28 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
         }
     }
 
+    private MediaPlayerListener mListener;
+
+    /**
+     * Listener trigger 'onVideoPrepared' and `onVideoEnd` events
+     */
+    public void setListener(MediaPlayerListener listener) {
+        mListener = listener;
+    }
+
+    public interface MediaPlayerListener {
+
+        public void onVideoPrepared();
+
+        public void onVideoEnd();
+    }
+
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int width, int height) {
-        mSurfaceTexture = surfaceTexture;
+        Surface surface = new Surface(surfaceTexture);
+        mMediaPlayer.setSurface(surface);
         mIsViewAvailable = true;
-        if (mIsDataSourceSet && mIsPlayCalled) {
+        if (mIsDataSourceSet && mIsPlayCalled && mIsVideoPrepared) {
             log("View is available and play() was called.");
             play();
         }

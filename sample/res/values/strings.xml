@@ -5,4 +5,10 @@
     <string name="Pause">Pause</string>
     <string name="Resume">Resume</string>
     <string name="Stop">Stop</string>
+
+    <string-array name="action_list">
+        <item>Crop Center</item>
+        <item>Crop Top</item>
+        <item>Crop Bottom</item>
+    </string-array>
 </resources>
