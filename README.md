@@ -1,6 +1,8 @@
 # IN DEVELOPMENT
 
-![asd](https://raw.githubusercontent.com/dmytrodanylyk/android-video-crop/master/sample.png)
+<img src="assets/sample1.png" style="width: 300px;"/>
+<img src="assets/sample2.png" style="width: 300px;"/>
+<img src="assets/sample3.png" style="width: 300px;"/>
 
 ### Description
 ----------
