@@ -22,7 +22,7 @@ Include library module to your project or copy [`TextureVideoView`](/library/src
 
 ```xml
 <com.dd.crop.TextureVideoView
-        android:id="@+id/cropTextureView1"
+        android:id="@+id/cropTextureView"
         android:layout_width="fill_parent"
         android:layout_height="100dp"/>
 ```
