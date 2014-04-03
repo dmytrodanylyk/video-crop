@@ -6,8 +6,6 @@
 
 ## Description
 
-[Texture View - Video Cropping Article](http://goo.gl/WAikcl)
-
 [`TextureVideoView`](/library/src/com/dd/crop/TextureVideoView.java) is custom view based on android [`TextureView`](http://developer.android.com/reference/android/view/TextureView.html) which gives you ability easily  play and crop video. It's very similar to [`ImageView#setScaleType`](http://developer.android.com/reference/android/widget/ImageView.html#setScaleType(android.widget.ImageView.ScaleType))
 
 Crop modes:
@@ -17,7 +15,6 @@ Crop modes:
  - BOTTOM
 
 ## Usage
-
 
 Include library module to your project or copy [`TextureVideoView`](/library/src/com/dd/crop/TextureVideoView.java) class to your package.
 
@@ -37,6 +34,10 @@ cropTextureView.setScaleType(TextureVideoView.ScaleType.TOP);
 cropTextureView.setDataSource("http://www.w3schools.com/html/mov_bbb.mp4");
 cropTextureView.play();
 ```
+
+## How it works?
+
+Read [Texture View - Video Cropping](http://goo.gl/WAikcl) Article
 
 ## API
 
