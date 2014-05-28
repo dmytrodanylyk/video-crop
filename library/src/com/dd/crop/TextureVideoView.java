@@ -1,3 +1,4 @@
+// From https://github.com/dmytrodanylyk/video-crop
 package com.dd.crop;
 
 import android.content.Context;
@@ -54,6 +55,7 @@ public class TextureVideoView extends TextureView implements TextureView.Surface
     private boolean mIsViewAvailable;
     private boolean mIsVideoPrepared;
     private boolean mIsPlayCalled;
+    private boolean mAutoPlay;
 
     private ScaleType mScaleType;
     private State mState;
@@ -147,6 +149,7 @@ public class TextureVideoView extends TextureView implements TextureView.Surface
         }
         mIsVideoPrepared = false;
         mIsPlayCalled = false;
+        mAutoPlay = false;
         mState = State.UNINITIALIZED;
     }
 
@@ -230,7 +233,7 @@ public class TextureVideoView extends TextureView implements TextureView.Surface
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
                     mIsVideoPrepared = true;
-                    if (mIsPlayCalled && mIsViewAvailable) {
+                    if ((mIsPlayCalled || mAutoPlay) && mIsViewAvailable) {
                         log("Player is prepared and play() was called.");
                         play();
                     }
@@ -353,6 +356,11 @@ public class TextureVideoView extends TextureView implements TextureView.Surface
     }
 
     /**
+     * Starts playing when ready
+     */
+    public void setAutoPlay() { mAutoPlay = true; }
+
+    /**
      * @see android.media.MediaPlayer#seekTo(int)
      */
     public void seekTo(int milliseconds) {
@@ -393,7 +401,7 @@ public class TextureVideoView extends TextureView implements TextureView.Surface
         Surface surface = new Surface(surfaceTexture);
         mMediaPlayer.setSurface(surface);
         mIsViewAvailable = true;
-        if (mIsDataSourceSet && mIsPlayCalled && mIsVideoPrepared) {
+        if (mIsDataSourceSet && (mIsPlayCalled || mAutoPlay) && mIsVideoPrepared) {
             log("View is available and play() was called.");
             play();
         }
