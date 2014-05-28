@@ -54,6 +54,7 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
     private boolean mIsViewAvailable;
     private boolean mIsVideoPrepared;
     private boolean mIsPlayCalled;
+    private boolean mAutoPlay;
 
     private ScaleType mScaleType;
     private State mState;
@@ -147,6 +148,7 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
         }
         mIsVideoPrepared = false;
         mIsPlayCalled = false;
+        mAutoPlay = false;
         mState = State.UNINITIALIZED;
     }
 
@@ -230,7 +232,7 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
                     mIsVideoPrepared = true;
-                    if (mIsPlayCalled && mIsViewAvailable) {
+                    if ((mIsPlayCalled || mAutoPlay) && mIsViewAvailable) {
                         log("Player is prepared and play() was called.");
                         play();
                     }
@@ -353,6 +355,11 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
     }
 
     /**
+     * Starts playing when ready
+     */
+    public void enableAutoPlay() { mAutoPlay = true; }
+
+    /**
      * @see android.media.MediaPlayer#seekTo(int)
      */
     public void seekTo(int milliseconds) {
@@ -401,11 +408,14 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
 
     @Override
     public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-
     }
 
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        mMediaPlayer.stop();
+        mIsViewAvailable = false;
+        mMediaPlayer.setSurface(null);
+        mMediaPlayer.reset();
         return false;
     }
 
