@@ -372,6 +372,13 @@ public class CropTextureView extends TextureView implements TextureView.SurfaceT
     public int getDuration() {
         return mMediaPlayer.getDuration();
     }
+    
+     /**
+     * @see android.media.MediaPlayer#getCurrentPosition()
+     */
+    public int getCurrentPosition() {
+        return mMediaPlayer.getCurrentPosition();
+    }
 
     static void log(String message) {
         if (LOG_ON) {
