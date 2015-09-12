@@ -1,9 +1,9 @@
 :small_red_triangle: **Before using this library, read information below** :small_red_triangle:
 ```
 This library is not more supported. 
-If you want to add new feature or fix a bug, grab source code and do it. If you think your 
-fix or feature would be useful to other developers, I can add link of your repository to this 
-README file. To contact me use following e-mail: dmytrodanylyk@gmail.com
+If you want to add new feature or fix a bug, grab source code and do it. If you think your
+fix or feature would be useful to other developers, I can add link of your repository to
+this README file. To contact me use following e-mail: dmytrodanylyk@gmail.com
 Thank you for using my libraries.
 
 ```
