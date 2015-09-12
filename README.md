@@ -1,8 +1,10 @@
 :x: **Before using this library, read information below** :x:
 ```
-This library is not more supported. If you want to add new feature/fix a bug, grab source code and do it. 
-If you think your fix/feature would be useful to other developers, contact me: dmytrodanylyk@gmail.com 
-and I will add link to your repository to this README file. Thank you for using my libraries.
+This library is not more supported. 
+If you want to add new feature/fix a bug, grab source code and do it. If you think your 
+fix/feature would be useful to other developers, contact me: dmytrodanylyk@gmail.com and 
+I will add link to your repository to this README file. 
+Thank you for using my libraries.
 
 ```
 
