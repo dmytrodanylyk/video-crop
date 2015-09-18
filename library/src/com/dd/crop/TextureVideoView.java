@@ -133,10 +133,32 @@ public class TextureVideoView extends TextureView implements TextureView.Surface
                 break;
         }
 
+//        Matrix matrix = new Matrix();
+//        matrix.setScale(scaleX, scaleY, pivotPointX, pivotPointY);
+//
+//        setTransform(matrix);
+
+        //this code can fix the bug that center_crop is not the same with center_crop of ImageView
+
+        float scale;
+        float dx = 0, dy = 0;
+
+        if( (mVideoWidth * viewHeight)  > (mVideoHeight * viewWidth)) {
+            scale = (float) viewHeight / (float) mVideoHeight;
+            dx = (viewWidth - mVideoWidth * scale) * 0.5f;
+        }else {
+            scale = (float) viewWidth / (float) mVideoWidth;
+            dy = (viewHeight - mVideoHeight * scale) * 0.5f;
+        }
+
+
         Matrix matrix = new Matrix();
-        matrix.setScale(scaleX, scaleY, pivotPointX, pivotPointY);
+
+        matrix.setScale(scaleX, scaleY);
+        matrix.postTranslate((int) (dx + 0.5f), (int) (dy + 0.5f));
 
         setTransform(matrix);
+
     }
 
     private void initPlayer() {
