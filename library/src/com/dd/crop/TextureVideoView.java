@@ -92,8 +92,11 @@ public class TextureVideoView extends TextureView implements TextureView.Surface
     }
 
     private void updateTextureViewSize() {
-        float viewWidth = getWidth();
-        float viewHeight = getHeight();
+        // float viewWidth = getWidth();
+        // float viewHeight = getHeight();
+
+        float viewWidth = getWidth() / 2;
+        float viewHeight = getHeight() / 2;
 
         float scaleX = 1.0f;
         float scaleY = 1.0f;
@@ -124,9 +127,6 @@ public class TextureVideoView extends TextureView implements TextureView.Surface
                 pivotPointY = (int) (viewHeight);
                 break;
             case CENTER_CROP:
-                pivotPointX = (int) (viewWidth / 2);
-                pivotPointY = (int) (viewHeight / 2);
-                break;
             default:
                 pivotPointX = (int) (viewWidth / 2);
                 pivotPointY = (int) (viewHeight / 2);
@@ -236,7 +236,7 @@ public class TextureVideoView extends TextureView implements TextureView.Surface
                     }
 
                     if (mListener != null) {
-                        mListener.onVideoPrepared();
+                        mListener.onVideoPrepared(mediaPlayer);
                     }
                 }
             });
@@ -383,7 +383,7 @@ public class TextureVideoView extends TextureView implements TextureView.Surface
 
     public interface MediaPlayerListener {
 
-        public void onVideoPrepared();
+        public void onVideoPrepared(MediaPlayer mediaPlayer);
 
         public void onVideoEnd();
     }
