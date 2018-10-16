@@ -59,7 +59,7 @@ public class TextureVideoView extends TextureView implements TextureView.Surface
     private State mState;
 
     public enum ScaleType {
-        CENTER_CROP, TOP, BOTTOM
+        CENTER_CROP, TOP, BOTTOM, CENTER_FIT
     }
 
     public enum State {
@@ -98,16 +98,23 @@ public class TextureVideoView extends TextureView implements TextureView.Surface
         float scaleX = 1.0f;
         float scaleY = 1.0f;
 
-        if (mVideoWidth > viewWidth && mVideoHeight > viewHeight) {
-            scaleX = mVideoWidth / viewWidth;
-            scaleY = mVideoHeight / viewHeight;
-        } else if (mVideoWidth < viewWidth && mVideoHeight < viewHeight) {
-            scaleY = viewWidth / mVideoWidth;
-            scaleX = viewHeight / mVideoHeight;
-        } else if (viewWidth > mVideoWidth) {
-            scaleY = (viewWidth / mVideoWidth) / (viewHeight / mVideoHeight);
-        } else if (viewHeight > mVideoHeight) {
-            scaleX = (viewHeight / mVideoHeight) / (viewWidth / mVideoWidth);
+        float vr = viewWidth / viewHeight;
+        float mr = mVideoWidth / mVideoHeight;
+
+        if ( mScaleType == ScaleType.CENTER_CROP ) {
+
+            if ( vr > mr )
+                scaleY = vr / mr;
+            else
+                scaleX = mr / vr;
+
+        }
+        else if ( mScaleType == ScaleType.CENTER_FIT ) {
+
+            if ( vr > mr )
+                scaleX = mr / vr;
+            else
+                scaleY = vr / mr;
         }
 
         // Calculate pivot points, in our case crop from center
@@ -124,6 +131,7 @@ public class TextureVideoView extends TextureView implements TextureView.Surface
                 pivotPointY = (int) (viewHeight);
                 break;
             case CENTER_CROP:
+            case CENTER_FIT:
                 pivotPointX = (int) (viewWidth / 2);
                 pivotPointY = (int) (viewHeight / 2);
                 break;
