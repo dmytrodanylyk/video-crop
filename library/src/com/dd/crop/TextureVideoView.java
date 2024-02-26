@@ -241,6 +241,16 @@ public class TextureVideoView extends TextureView implements TextureView.Surface
                 }
             });
 
+            mMediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                @Override
+                public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
+                    if (mListener != null) {
+                        return mListener.onError();
+                    }
+                    return false;
+                }
+            });
+
         } catch (IllegalArgumentException e) {
             Log.d(TAG, e.getMessage());
         } catch (SecurityException e) {
@@ -386,6 +396,8 @@ public class TextureVideoView extends TextureView implements TextureView.Surface
         public void onVideoPrepared();
 
         public void onVideoEnd();
+
+        public boolean onError();
     }
 
     @Override
